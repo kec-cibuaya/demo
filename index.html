@@ -229,146 +229,151 @@
     </div>
 </section>
 
-<section id="pegawai" class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Daftar Pegawai</h2>
-            <p class="text-lg text-gray-600">Tim profesional yang siap melayani masyarakat</p>
-        </div>
-
-        <div class="flex flex-wrap justify-center gap-4 mb-8">
-            <button onclick="filterPegawai('semua')" class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                Semua Pegawai
-            </button>
-            <button onclick="filterPegawai('pns')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
-                PNS
-            </button>
-            <button onclick="filterPegawai('honorer')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
-                Honorer
-            </button>
-            <button onclick="filterPegawai('kontrak')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
-                Kontrak
-            </button>
-        </div>
-
-        <div id="pegawai-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
-                <div class="w-12 h-12 bg-blue-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍💼</span>
-                </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Marpudin</h3>
-                <p class="text-blue-600 text-sm text-center mb-1">Pol Pp</p>
-                <p class="text-gray-600 text-xs text-center">NIP: 197004062006041003</p>
+ <!-- Daftar Pegawai -->
+    <section id="pegawai" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Daftar Pegawai</h2>
+                <p class="text-lg text-gray-600">Tim profesional yang siap melayani masyarakat</p>
             </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
-                <div class="w-12 h-12 bg-pink-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👩‍💼</span>
-                </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Usman Apandi, SM</h3>
-                <p class="text-blue-600 text-sm text-center mb-1">Bendahara Pengeluaran</p>
-                <p class="text-gray-600 text-xs text-center">NIP: 197709162009011003</p>
-            </div>
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button onclick="filterPegawai('semua')" class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    Semua Pegawai
+                </button>
+                <button onclick="filterPegawai('pns')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                 
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
-                <div class="w-12 h-12 bg-green-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍💻</span>
+            <!-- Pegawai Grid -->
+            <div id="pegawai-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- PNS -->
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
+                    <div class="w-12 h-12 bg-blue-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍💼</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Marpudin</h3>
+                    <p class="text-blue-600 text-sm text-center mb-1">Pol Pp</p>
+                    
+                    <p class="text-gray-600 text-xs text-center">NIP: 197004062006041003</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Januar Ibrahim, S.I.P</h3>
-                <p class="text-blue-600 text-sm text-center mb-1">Penata Kelola Pemerintahan</p>
-                <p class="text-gray-600 text-xs text-center">NIP: 199701292025051004</p>
-            </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
-                <div class="w-12 h-12 bg-purple-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👩‍⚖</span>
-                </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Putri Amalia, S.Kom</h3>
-                <p class="text-blue-600 text-sm text-center mb-1">Penata Kelola Sistem & TI</p>
-                <p class="text-gray-600 text-xs text-center">NIP: 199807142025052005</p>
-            </div>
-
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
-                <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍🏫</span>
-                </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Wahyu Hidayat, S.A.P.</h3>
-                <p class="text-orange-600 text-sm text-center mb-1">Staff Pelayanan</p>
-                <p class="text-gray-600 text-xs text-center">Masa Kerja: 8 Tahun</p>
-            </div>
-
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
-                <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍🏫</span>
-                </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Andhi Permana</h3>
-                <p class="text-orange-600 text-sm text-center mb-1">Staff Pelayanan</p>
-                <p class="text-gray-600 text-xs text-center">Masa Kerja: 8 Tahun</p>
-            </div>
-
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
+                    <div class="w-12 h-12 bg-pink-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👩‍💼</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Usman Apandi, SM</h3>
+                    <p class="text-blue-600 text-sm text-center mb-1">Bendahara Pengeluaran</p>
             
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
-                <div class="w-12 h-12 bg-teal-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👩‍🔬</span>
+                    <p class="text-gray-600 text-xs text-center">NIP: 197709162009011003</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Dicky Nusa Pratama, S.E</h3>
-                <p class="text-orange-600 text-sm text-center mb-1">Staff Kesehatan</p>
-                <p class="text-gray-500 text-xs text-center mb-2">Honorer</p>
-                <p class="text-gray-600 text-xs text-center">Masa Kerja: 5 Tahun</p>
-            </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
-                <div class="w-12 h-12 bg-red-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍🚒</span>
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
+                    <div class="w-12 h-12 bg-green-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍💻</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Januar Ibrahim, S.I.P</h3>
+                    <p class="text-blue-600 text-sm text-center mb-1">Penata Kelola Pemerintahan</p>
+                   
+                    <p class="text-gray-600 text-xs text-center">NIP: 199701292025051004</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Lucky Mukti</h3>
-                <p class="text-orange-600 text-sm text-center mb-1">Pol Pp</p>
-                <p class="text-gray-500 text-xs text-center mb-2">Honorer</p>
-                <p class="text-gray-600 text-xs text-center">Masa Kerja: 12 Tahun</p>
-            </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
-                <div class="w-12 h-12 bg-indigo-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👩‍💻</span>
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
+                    <div class="w-12 h-12 bg-purple-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👩‍⚖</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Putri Amalia, S.Kom</h3>
+                    <p class="text-blue-600 text-sm text-center mb-1">Penata Kelola Sistem & TI</p>
+                   
+                    <p class="text-gray-600 text-xs text-center">NIP: 199807142025052005</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">K. Iskandar</h3>
-                <p class="text-indigo-600 text-sm text-center mb-1">Programmer</p>
-                <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
-                <p class="text-gray-600 text-xs text-center">Kontrak: 2023-2025</p>
-            </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
-                <div class="w-12 h-12 bg-yellow-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍🎨</span>
+                <!-- Honorer -->
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
+                    <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍🏫</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Wahyu Hidayat, S.A.P.</h3>
+                    <p class="text-orange-600 text-sm text-center mb-1">Staff Pelayanan</p>
+                   
+                    <p class="text-gray-600 text-xs text-center">Masa Kerja: 8 Tahun</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Iim Rohimah</h3>
-                <p class="text-indigo-600 text-sm text-center mb-1">Desainer Grafis</p>
-                <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
-                <p class="text-gray-600 text-xs text-center">Kontrak: 2024-2026</p>
-            </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
-                <div class="w-12 h-12 bg-cyan-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👩‍📊</span>
+ <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
+                    <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍🏫</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Andhi Permana</h3>
+                    <p class="text-orange-600 text-sm text-center mb-1">Staff Pelayanan</p>
+                   
+                    <p class="text-gray-600 text-xs text-center">Masa Kerja: 8 Tahun</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Adit</h3>
-                <p class="text-blue-600 text-sm text-center mb-1">Staff Statistik</p>
-                <p class="text-gray-500 text-xs text-center mb-2">PNS - Golongan II/c</p>
-                <p class="text-gray-600 text-xs text-center">NIP: 199408151999032008</p>
-            </div>
 
-            <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
-                <div class="w-12 h-12 bg-lime-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <span class="text-white">👨‍📱</span>
+                
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
+                    <div class="w-12 h-12 bg-teal-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👩‍🔬</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Dicky Nusa Pratama, S.E</h3>
+                    <p class="text-orange-600 text-sm text-center mb-1">Staff Kesehatan</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">Honorer</p>
+                    <p class="text-gray-600 text-xs text-center">Masa Kerja: 5 Tahun</p>
                 </div>
-                <h3 class="font-semibold text-gray-900 text-center mb-1">Andi Saputra</h3>
-                <p class="text-indigo-600 text-sm text-center mb-1">Social Media</p>
-                <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
-                <p class="text-gray-600 text-xs text-center">Kontrak: 2024-2025</p>
+
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
+                    <div class="w-12 h-12 bg-red-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍🚒</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Lucky Mukti</h3>
+                    <p class="text-orange-600 text-sm text-center mb-1">Pol Pp</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">Honorer</p>
+                    <p class="text-gray-600 text-xs text-center">Masa Kerja: 12 Tahun</p>
+                </div>
+
+                <!-- Kontrak -->
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
+                    <div class="w-12 h-12 bg-indigo-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👩‍💻</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">K. Iskandar</h3>
+                    <p class="text-indigo-600 text-sm text-center mb-1">Programmer</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
+                    <p class="text-gray-600 text-xs text-center">Kontrak: 2023-2025</p>
+                </div>
+
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
+                    <div class="w-12 h-12 bg-yellow-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍🎨</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Iim Rohimah</h3>
+                    <p class="text-indigo-600 text-sm text-center mb-1">Desainer Grafis</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
+                    <p class="text-gray-600 text-xs text-center">Kontrak: 2024-2026</p>
+                </div>
+
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
+                    <div class="w-12 h-12 bg-cyan-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👩‍📊</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Adit</h3>
+                    <p class="text-blue-600 text-sm text-center mb-1">Staff Statistik</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">PNS - Golongan II/c</p>
+                    <p class="text-gray-600 text-xs text-center">NIP: 199408151999032008</p>
+                </div>
+
+                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
+                    <div class="w-12 h-12 bg-lime-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-white">👨‍📱</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 text-center mb-1">Andi Saputra</h3>
+                    <p class="text-indigo-600 text-sm text-center mb-1">Social Media</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
+                    <p class="text-gray-600 text-xs text-center">Kontrak: 2024-2025</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
 
 <section id="kontak" class="py-16 bg-gray-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
