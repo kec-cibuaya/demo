@@ -1,92 +1,458 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Kecamatan Cibuaya</title>
+    <title>Website Resmi Kecamatan Cibuaya — Pelayanan & Informasi Publik</title>
+    <meta name="description" content="Website resmi Kecamatan Cibuaya, Karawang. Informasi pelayanan publik, struktur organisasi, dan kontak pegawai.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        /* --- NEW HERO IMAGE STYLE --- */
-        .hero-image-bg {
-            /* MENGGUNAKAN IMAGE PLACEHOLDER: Ganti URL ini dengan foto kantor atau pemandangan Cibuaya yang sebenarnya */
-            background: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhomzrz6M10-2cx6PTCBsqqXx9esBb4-WStk8BoN8JRyZ20yY0zjTvL4CKbxCPShSif60FzboYZTWUgFW4QvjJNvdzaelL7rgGwXRT3kvmzs_Rbs1nbhPcAkiof4Cu1MwVKN4KSB2ldraD3PTiwQ7FoOEkPHNjNwbN03vANUlNgwg2bZwNJpi7MHAM1edA/s1156/WhatsApp%20Image%202025-10-04%20at%2020.41.46.jpeg') center/cover no-repeat;
-            position: relative;
-            z-index: 1; /* Pastikan konten di atas overlay */
+        /* Custom Variables and Typography */
+        :root {
+            --primary-blue: #2563eb; /* Tailwind blue-600 */
+            --primary-accent: #0b6e4f; /* New accent color */
         }
-        .hero-image-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            /* Overlay gelap untuk kontras teks putih */
-            background: rgba(0, 0, 0, 0.55);
-            z-index: -1; 
+        
+        /* warna latar belakang body abu-abu muda yang sedikit lebih gelap (bg-gray-100) */
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
         }
-        /* --- END NEW HERO IMAGE STYLE --- */
+        
+       /* NEW SLIDER CSS */
+.slider-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0; /* Semua gambar dimulai tersembunyi */
+    transition: opacity 1.5s ease-in-out; /* Transisi untuk efek fade */
+    z-index: 1;
+}
 
-        body { font-family: 'Inter', sans-serif; }
+.slider-image.active {
+    opacity: 1; /* Gambar aktif terlihat */
+}
+
+/* NEW OVERLAY CSS (Used in HTML) */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4); /* Overlay 40% */
+    z-index: 2; /* Di atas gambar slider, di bawah konten hero */
+}
+
+
+/* --- Penyesuaian Styling Tombol Panah Slider (BARU) --- */
+.slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5); 
+    color: white;
+    padding: 10px;
+    border-radius: 9999px; 
+    cursor: pointer;
+    z-index: 50; /* ⬅️ UBAH NILAI Z-INDEX MENJADI LEBIH TINGGI */
+    transition: background 0.3s;
+    border: none;
+}
+
+.slider-button:hover {
+    background: #25D366;
+}
+
+.slider-button:hover svg {
+color: #ccfbf1;
+}
+
+#prevBtn {
+    left: 20px; /* Jarak dari tepi kiri */
+}
+
+#nextBtn {
+    right: 20px; /* Jarak dari tepi kanan */
+}
+/* --- Akhir Penyesuaian Styling Tombol Panah Slider --- */
+
         .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1); }
+        /* Floating WA Button Style (Adopted from Code 2) */
+        .wa-float {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #25D366;
+            border-radius: 999px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            z-index: 50; /* Z-index lebih tinggi dari ScrollToTop */
+            transition: transform 0.3s;
+        }
+        .wa-float:hover {
+            transform: scale(1.05);
+        }
+        .wa-float a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* CSS BARU untuk SCROLL TO TOP BUTTON */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 90px; /* Geser 70px ke atas dari WA button (bottom: 20px) */
+            right: 20px;
+            z-index: 40; /* Z-index di bawah WA button */
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        #scrollToTopBtn.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Akhir CSS BARU */
+
+
+        /* Fade-in animation for filtering */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pegawai-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+/* --- Styling Dots Indicator (BARU) --- */
+.dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: rgba(255, 255, 255, 0.4); /* Putih transparan (Inactive) */
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+    cursor: pointer;
+}
+
+.dot.active {
+    /* Hijau solid untuk status active */
+    background-color: rgba(37, 211, 102, 0.9) /* Emerald-700 90% opacity */
+}
+
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-100">
     
-<nav class="bg-white shadow-lg sticky top-0 z-50">
+<nav class="bg-white shadow-lg sticky top-0 z-50 transition-shadow duration-300" id="main-nav">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between h-20">
             
             <div class="flex items-center">
                 <a href="#beranda" class="flex-shrink-0 flex items-center">
-                    <img alt="Kecamatan Cibuaya" class="h-16 w-auto" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm5fR_mXuAVyfw3-Y2EdnvygFpqQ0uY40alDwuQOEglm_OrLU_l9sz0MJlTFdQN361Sh1HXKPaGmGbfTMDXszygTmw1o1N-sgmjmrx60ncfG4bvqpZUTzJhKKeFwMXnH5GtRAl9XhmquVUs__fnMXNP78-H7Xxe0hflfwlGRLr6PsX1DCQwAW9KYMf330/s942/Screenshot_20251003_193213_Canva.jpg">
-                </a>
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm5fR_mXuAVyfw3-Y2EdnvygFpqQ0uY40alDwuQOEglm_OrLU_l9sz0MJlTFdQN361Sh1HXKPaGmGbfTMDXszygTmw1o1N-sgmjmrx60ncfG4bvqpZUTzJhKKeFwMXnH5GtRAl9XhmquVUs__fnMXNP78-H7Xxe0hflfwlGRLr6PsX1DCQwAW9KYMf330/s942/Screenshot_20251003_193213_Canva.jpg" alt="Logo Kecamatan Cibuaya" class="h-16 w-auto">
+                    </a>
             </div>
 
+          
+
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#beranda" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Beranda</a>
-                <a href="#profil" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Profil</a>
-                <a href="#struktur" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Struktur</a>
-                <a href="#pegawai" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Pegawai</a>
-                <a href="#kontak" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Kontak</a>
-                <a href="https://jdih.karawangkab.go.id/">JDIH</a>
-                <a href="#Pengumuman" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Pengumuman</a>
+                <a href="#beranda" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs">Beranda</a>
+                
+                <div class="relative group">
+                    <a href="#profil" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs flex items-center whitespace-nowrap">
+                        Profil
+                        <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </a>
+                    
+                    <div class="absolute z-50 hidden group-hover:block w-56 bg-white rounded-lg shadow-xl py-2 mt-0.5 border border-gray-100">
+                        <a href="#profil" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 nav-link">Profil Kecamatan</a>
+                        <a href="#struktur" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 nav-link">Struktur Organisasi</a>
+                        <a href="#pegawai" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 nav-link">Daftar Pegawai</a>
+                        <a href="#kontak" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 nav-link">Medsos & G-Maps</a>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <a href="#layanan" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs flex items-center whitespace-nowrap">
+                        Layanan Kecamatan
+                        <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </a>
+                    
+                    <div class="absolute z-50 hidden group-hover:block w-56 bg-white rounded-lg shadow-xl py-2 mt-0.5 border border-gray-100">
+                         <a href="#layanan" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 nav-link">Administrasi Kependudukan</a>
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Pengaduan</a>
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Register Tamu</a>
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Survey Kepuasan Masyarakat</a>
+
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Kritik & Saran</a>
+ </div>
+                </div>
+
+
+<div class="relative group">
+                    <a href="#layanan" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs flex items-center whitespace-nowrap">
+                        Layanan Pemerintahan
+                        <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </a>
+                    
+                    <div class="absolute z-50 hidden group-hover:block w-56 bg-white rounded-lg shadow-xl py-2 mt-0.5 border border-gray-100">
+   <a href="https://api.whatsapp.com/send/?phone=6281114091409&text&type=phone_number&app_absent=0 target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">PAK HAJI</a>
+                          <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Cek PBB Online</a>
+
+
+ <a href="https://edukcapil.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Edukcapil</a>
+
+ <a href="https://infoloker.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Info Loker</a>
+
+ <a href="https://tangkar.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Pengaduan Publik</a>
+
+
+ </div>
+                </div>
+
+
+ 
+                
+                <a href="#berita-pengumuman" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs">Berita & Info</a>
+ <a href="https://www.pantaisedari.com/" target="_blank" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs">Wisata</a>
+
+
+
+            
+                <a href="https://jdih.karawangkab.go.id/" target="_blank" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs">JDIH</a>
+            
+            
+<a href="https://ppid.karawangkab.go.id/" target="_blank" class="text-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 font-semibold hover:bg-blue-50 transition-colors text-xs">PPID</a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600 p-2 rounded-md transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
         </div>
-        <div class="md:hidden flex items-center">
-            <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
-        </div>
     </div>
+    
     <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
         <div class="px-2 pt-2 pb-3 space-y-1">
-            <a href="#beranda" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Beranda</a>
-            <a href="#profil" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Profil</a>
-            <a href="#struktur" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Struktur</a>
-            <a href="#pegawai" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Pegawai</a>
-            <a href="#kontak" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Kontak</a>
-            <a href="https://jdih.karawangkab.go.id" target="_blank" rel="noopener noreferrer" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">JDIH</a>
-            <a href="#Pengumuman" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Pengumuman</a>
+            <a href="#beranda" class="mobile-nav-link block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Beranda</a>
+            
+            <div x-data="{ open: false }" class="border-b border-gray-100">
+                <button @click="open = !open" class="w-full text-left flex justify-between items-center px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+                    Profil
+                    <svg :class="{'rotate-180': open}" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div x-show="open" class="pl-6 pb-2 space-y-1 transition-all duration-300 ease-in-out">
+                    <a href="#profil" class="block px-3 py-1 text-sm text-gray-600 hover:text-blue-600 mobile-nav-link">Profil Kecamatan</a>
+                    <a href="#struktur" class="block px-3 py-1 text-sm text-gray-600 hover:text-blue-600 mobile-nav-link">Struktur Organisasi</a>
+                    <a href="#pegawai" class="block px-3 py-1 text-sm text-gray-600 hover:text-blue-600 mobile-nav-link">Daftar Pegawai</a>
+                    <a href="#kontak" class="block px-3 py-1 text-sm text-gray-600 hover:text-blue-600 mobile-nav-link">Kontak, Medsos & G-Maps </a>
+                </div>
+            </div>
+                         <div x-data="{ open: false }" class="border-b border-gray-100">
+                <button @click="open = !open" class="w-full text-left flex justify-between items-center px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+                    Layanan Kecamatan
+                    <svg :class="{'rotate-180': open}" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div x-show="open" class="pl-6 pb-2 space-y-1 transition-all duration-300 ease-in-out">
+                         <a href="#layanan" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 nav-link">Administrasi Kependudukan</a>
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Pengaduan</a>
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Register Tamu</a>
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Survey Kepuasan Masyarakat</a>
+
+
+ <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Kritik & Saran</a>
+ </div>
+                </div>
+
+
+ <div x-data="{ open: false }" class="border-b border-gray-100">
+                <button @click="open = !open" class="w-full text-left flex justify-between items-center px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+                    Layanan Pemerintahan
+                    <svg :class="{'rotate-180': open}" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div x-show="open" class="pl-6 pb-2 space-y-1 transition-all duration-300 ease-in-out">
+
+   <a href="https://api.whatsapp.com/send/?phone=6281114091409&text&type=phone_number&app_absent=0 target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">PAK HAJI</a>
+                          <a href="https://cekpbb.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Cek PBB Online</a>
+
+
+ <a href="https://edukcapil.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Edukcapil</a>
+
+ <a href="https://infoloker.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Info Loker</a>
+
+ <a href="https://tangkar.karawangkab.go.id/" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">Pengaduan Publik</a>
+</div>
+            </div>
+            
+            <a href="#berita-pengumuman" class="mobile-nav-link block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Berita & Info</a>
+
+<a href="https://www.pantaisedari.com/" target="_blank" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Wisata</a>
+ 
+<a href="https://jdih.karawangkab.go.id" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">JDIH</a>
+
+<a href="https://ppid.karawangkab.go.id/" class="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">PPID</a>
+
+
+
         </div>
     </div>
 </nav>
 
-<section id="beranda" class="hero-image-bg text-white py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6">Kecamatan Cibuaya</h1>
-        <p class="text-xl md:text-2xl mb-8 opacity-90">Melayani dengan Dedikasi, Membangun dengan Integritas</p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onclick="scrollToSection('profil')" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                Lihat Profil
-            </button>
-            <button onclick="scrollToSection('kontak')" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
-                Hubungi Kami
-            </button>
+<section id="beranda" class="relative text-white py-20 overflow-hidden min-h-[90vh] flex items-center">
+    <div id="image-slider" class="absolute inset-0 w-full h-full">
+        
+        <div class="slider-image active" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEig_THzyOCXyFXYeqDmW2pqr91Q26ZUn1ertFOIpwLgB1PcJkovpVJ_j_2qtQFA55QsG6igWZVYDapaN2VzIMfXrWeRsHgYRJebRugY-i31RdIH_66y93nC0QMs538UVESKW5zjvBFQ88V5dsO4GRR9O0JDimQ9_40mUfvy2n3rSvRudtLkLgFFRtCCzsA/s1156/ae8b1c83-7abc-40dc-ab31-fb1d2bd17d37.jpg');"></div>
+        
+        <div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20HARI%20TNI.jpg?itok=XN0C1dWr');"></div>
+        
+        <div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20HARI%20BATIK%20NASIONAL.jpg?itok=U6u1uoVC');"></div>
+        
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20HARI%20KESAKTIAN%20PANCASILA.png?itok=_SHH8JkS');"></div>
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/WhatsApp%20Image%202025-09-26%20at%2009.02.30.jpeg?itok=vZLW4oc9');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDER-MASAGI-HUT-KARAWANG-392.png?itok=XTUo9tR8');"></div>
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDER-ANTI-KORUPSI-DALAM-RANGKA-EVENT-PARIWARA-KPK.png?itok=Y7D62KX2');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/KONTEN-HAREUDANG-FEST-KALENDER-EVENT.jpg?itok=FEuFuiMh');"></div>
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20VISI%20MISI%20%283%29.jpg?itok=vatL_nuR');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20WHATSAPP%20PAK%20HAJI.jpg?itok=vpmFaVUc');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20APLIKASI%20INFOLOKER%20%282%29.jpg?itok=f2GmVb9T');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20APLIKASI%20EDUKCAPIL%20%282%29.jpg?itok=GkoF4AkA');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20APLIKASI%20TANGKAR.jpg?itok=oWgcIzsI');"></div>
+
+
+<div class="slider-image" style="background-image: url('https://karawangkab.go.id/sites/default/files/styles/mslider_bg/public/SLIDE%20APLIKASI%20CEK%20PBB.jpg?itok=9YMJIwgO');"></div>
+
+
+        <div class="hero-overlay"></div>
+</div>
+ <button id="prevBtn" class="slider-button">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="greenColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    </button>
+    <button id="nextBtn" class="slider-button">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+    </button>
+    
+ <div id="slider-dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex space-x-2">
+        </div>    
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 w-full">
+
+        <div class="grid md:grid-cols-3 gap-8 items-center">
+            <div class="md:col-span-2 text-start md:text-left">
+                <marquee behavior="scroll" direction="left" scrollamount="10" class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
+                    Selamat datang di Situs Resmi Kecamatan Cibuaya
+                </marquee>
+
+ <p class="text-xl md:text-2xl mb-8 opacity-120">Melayani dengan Dedikasi, Membangun dengan Integritas</p>
+
+
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 pl-10">
+
+<span class="text-xl text-green-600 mt-1">🕒</span>
+                    <div>
+
+                        <strong class="text-sm">Jam Pelayanan</strong>
+                        <p class="text-white-600 text-sm">Senin - Jumat, 08.00 - 16.00 WIB</p>
+
+
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 pl-10">
+<span class="text-xl text-green-600 mt-1">📍</span>
+                    <div>
+
+                        <strong class="text-sm">Alamat Kantor</strong>
+                        <p class="text-white-600 text-sm">Jl. Pajaten Kedungjaya No. 1 Cibuaya - Karawang 41356</p>
+
+               <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mt-6">
+
+<button onclick="scrollToSection('kontak')" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition-colors">
+                   Selengkapnya
+</button>
+</div>
+
+<button id="prevBtn" class="slider-button">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <button id="nextBtn" class="slider-button">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+            </div>
+       
+            </div>
+        </div>
+    
+</section>
+
+
+<section id="layanan" class="py-16 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Layanan Publik Kecamatan</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Layanan cepat dan jelas untuk kebutuhan administrasi warga Kecamatan Cibuaya.</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="card bg-white border border-gray-200 p-6 rounded-xl card-hover">
+                <div class="text-2xl mb-3 text-blue-600">📄</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Administrasi Kependudukan</h3>
+                <p class="text-gray-600 text-sm">Syarat dan alur pengajuan KTP, KK, dan surat keterangan domisili.</p>
+                <a href="#kontak" class="text-sm font-medium text-blue-600 hover:text-blue-800 mt-2 block">Detail →</a>
+            </div>
+            <div class="card bg-white border border-gray-200 p-6 rounded-xl card-hover">
+                <div class="text-2xl mb-3 text-red-600">🚨</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Pengaduan Masyarakat</h3>
+                <p class="text-gray-600 text-sm">Laporkan masalah jalan, kebersihan, atau administrasi melalui form dan nomor pelapor.</p>
+                <a href="https://wa.me/6285731718562" target="_blank" class="text-sm font-medium text-red-600 hover:text-red-800 mt-2 block">Laporkan →</a>
+            </div>
+            <div class="card bg-white border border-gray-200 p-6 rounded-xl card-hover">
+                <div class="text-2xl mb-3 text-amber-600">🏢</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Perizinan UMKM</h3>
+                <p class="text-gray-600 text-sm">Informasi perizinan usaha mikro dan rekomendasi administrasi lainnya.</p>
+                <a href="#kontak" class="text-sm font-medium text-blue-600 hover:text-blue-800 mt-2 block">Detail →</a>
+            </div>
         </div>
     </div>
 </section>
@@ -95,72 +461,134 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Profil Kecamatan</h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Kecamatan Cibuaya adalah salah satu kecamatan yang berkomitmen untuk memberikan pelayanan terbaik kepada masyarakat dengan mengedepankan transparansi dan akuntabilitas.</p>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Kecamatan Cibuaya berkomitmen untuk memberikan pelayanan terbaik dan mengedepankan akuntabilitas.</p>
         </div>
         
-        <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
             <div>
                 <h3 class="text-2xl font-semibold text-gray-900 mb-6">Visi & Misi</h3>
                 <div class="space-y-6">
-                    <div class="bg-blue-50 p-6 rounded-lg">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
                         <h4 class="text-lg font-semibold text-blue-900 mb-3">🎯 Visi</h4>
                         <p class="text-gray-700">Menjadi kecamatan yang maju, sejahtera, dan berdaya saing tinggi dengan pelayanan publik yang prima.</p>
                     </div>
-                    <div class="bg-green-50 p-6 rounded-lg">
+                    <div class="bg-green-50 p-6 rounded-lg shadow-md">
                         <h4 class="text-lg font-semibold text-green-900 mb-3">🚀 Misi</h4>
-                        <ul class="text-gray-700 space-y-2">
-                            <li>• Meningkatkan kualitas pelayanan publik</li>
-                            <li>• Memberdayakan masyarakat dan ekonomi lokal</li>
-                            <li>• Menjaga ketertiban dan keamanan wilayah</li>
-                            <li>• Mengembangkan infrastruktur yang berkelanjutan</li>
+                        <ul class="text-gray-700 space-y-2 list-disc list-inside">
+                            <li>Meningkatkan kualitas pelayanan publik</li>
+                            <li>Memberdayakan masyarakat dan ekonomi lokal</li>
+                            <li>Menjaga ketertiban dan keamanan wilayah</li>
+                            <li>Mengembangkan infrastruktur yang berkelanjutan</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-6">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-lg text-center">
-                    <div class="text-3xl font-bold mb-2">11</div>
-                    <div class="text-sm opacity-90">Desa/Kelurahan</div>
-                </div>
-                <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-lg text-center">
-                    <div class="text-3xl font-bold mb-2">45,230</div>
-                    <div class="text-sm opacity-90">Penduduk</div>
-                </div>
-                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-lg text-center">
-                    <div class="text-3xl font-bold mb-2">156</div>
-                    <div class="text-sm opacity-90">km² Luas Wilayah</div>
-                </div>
-                <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-lg text-center">
-                    <div class="text-3xl font-bold mb-2">28</div>
-                    <div class="text-sm opacity-90">Pegawai</div>
+            <div class="p-6 bg-gray-100 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-6">Data Statistik Wilayah</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-6 rounded-lg text-center shadow-lg">
+                        <div class="text-4xl font-extrabold mb-1">11</div>
+                        <div class="text-sm opacity-95">Desa/Kelurahan</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-6 rounded-lg text-center shadow-lg">
+                        <div class="text-4xl font-extrabold mb-1">56,554</div>
+                        <div class="text-sm opacity-95">Penduduk (Jiwa)</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-700 text-white p-6 rounded-lg text-center shadow-lg">
+                        <div class="text-4xl font-extrabold mb-1">87,16</div>
+                        <div class="text-sm opacity-95">km² Luas Wilayah</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white p-6 rounded-lg text-center shadow-lg">
+                        <div class="text-4xl font-extrabold mb-1">21</div>
+                        <div class="text-sm opacity-95">Pegawai Kantor</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="struktur" class="py-16 bg-gray-50">
+<section id="berita-pengumuman" class="py-16 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Berita & Pengumuman Terbaru</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Informasi dan kegiatan terkini seputar pelayanan dan pembangunan Kecamatan Cibuaya.</p>
+        </div>
+
+<div class="grid lg:grid-cols-3 gap-8">
+    <article class="bg-white rounded-xl shadow-lg border border-gray-100 card-hover overflow-hidden">
+        <img src="https://karawangkab.bps.go.id/_next/image?url=https%3A%2F%2Fweb-api.bps.go.id%2Fcover.php%3Ff%3D%2B%2BgJ7ZC9gocU8X1Y5cvA%2BkxqYW1xdTI2QUhhOFFiZnphazJKZTJxdTRMUVhsSDNNdENmZnNTOVltbU0zRk9ycGQvcGNmdjhrNjlreDVaeUZSMVNKNkNtaGlaWVpLenRWNTltUTV0bGV6eTZpWG90ZkZrOVZFUytKem1kODVuaVlKelgzc1F3UUwxQTlBQUs3&w=3840&q=75"
+            
+             class="w-full h-48 object-cover">
+        <div class="p-6">
+            <span class="text-xs font-semibold text-blue-600 mb-1 block">26 September 2025</span>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Kecamatan Cibuaya Dalam Angka 2025</h3>
+            <p class="text-gray-600 text-sm">Kecamatan Cibuaya Dalam Angka 2025 merupakan seri publikasi yang memuat data statistik yang bersumber dari data sekunder, baik dari instansi pemerintah daerah maupun swasta yang berada di wilayah Kecamatan Cibuaya.</p>
+            <a href="https://karawangkab.bps.go.id/id/publication/2025/09/26/9b32894c8450aadfe7d1e4ca/kecamatan-cibuaya-dalam-angka-2025.html" class="text-sm font-medium text-blue-600 hover:text-blue-800 mt-3 inline-block">
+            Baca Selengkapnya →</a>
+
+        </div>
+    </article>
+
+            <article class="bg-white rounded-xl shadow-lg border border-gray-100 card-hover overflow-hidden">
+        <img src="https://img.inews.co.id/media/600/files/networks/2025/09/12/cc90c_banjir-rob.jpeg"
+            
+             class="w-full h-48 object-cover">
+        <div class="p-6">
+            <span class="text-xs font-semibold text-blue-600 mb-1 block">12 September 2025</span>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Dilanda Banjir Rob, Siswa SMPN Satap 1 Cibuaya Bertaruh Nyawa Untuk Sekolah</h3>
+            <p class="text-gray-600 text-sm">KARAWANG, iNEWSKarawang.id – Sejumlah siswa SMPN Satap 1 Cibuaya, Kabupaten Karawang, terpaksa harus bertaruh nyawa untuk pulang sekolah dengan menggunakan perahu karet akibat banjir rob dan hujan deras yang melanda Kecamatan Cibuaya, Kamis (11/9/2025) siang.</p>
+            <a href="https://karawang.inews.id/read/636104/dilanda-banjir-rob-siswa-smpn-satap-1-cibuaya-bertaruh-nyawa-untuk-sekolah" class="text-sm font-medium text-blue-600 hover:text-blue-800 mt-3 inline-block">
+            Baca Selengkapnya →</a>
+
+                </div>
+            </article>
+            
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-3">Pengumuman Penting</h3>
+                <div class="space-y-4">
+                    <div class="news-item flex gap-4 items-start border-b pb-4">
+                        <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-3xl font-bold">💉</div>
+                        <div>
+                            <strong class="text-gray-900 block mb-1">Jadwal Vaksinasi Lansia Tahap 3</strong>
+                            <div class="text-gray-600 text-sm">12 Oktober 2025 | Layanan kesehatan keliling akan mengunjungi 5 desa. Wajib bawa KTP.</div>
+                        </div>
+                    </div>
+                    <div class="news-item flex gap-4 items-start">
+                        <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center text-3xl font-bold">📣</div>
+                        <div>
+                            <strong class="text-gray-900 block mb-1">Rapat Koordinasi Rutin Kantor</strong>
+                            <div class="text-gray-600 text-sm">20 Oktober 2025 | Undangan resmi untuk seluruh kepala RT dan RW. Pakaian: Batik.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="struktur" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Struktur Organisasi</h2>
             <p class="text-lg text-gray-600">Pimpinan dan jajaran struktural Kecamatan Cibuaya</p>
         </div>
 
-        <div class="flex justify-center mb-8">
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center max-w-sm card-hover">
-                <div class="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white text-2xl">👨‍💼</span>
+        <div class="flex justify-center mb-10">
+            <div class="bg-gray-50 rounded-lg shadow-xl p-8 text-center max-w-xs w-full border-t-4 border-blue-600 card-hover">
+                <div class="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                    <span class="text-white text-3xl">👨‍💼</span>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Ahmad Mustopa, S.STP</h3>
-                <p class="text-blue-600 font-medium mb-2">Camat</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-1">Ahmad Mustopa, S.STP</h3>
+                <p class="text-blue-600 font-semibold mb-2">Camat Cibuaya</p>
                 <p class="text-gray-600 text-sm">NIP: 197902151998101001</p>
             </div>
         </div>
 
-        <div class="flex justify-center mb-8">
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center max-w-sm card-hover">
-                <div class="w-20 h-20 bg-green-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white text-xl">👩‍💼</span>
+        <div class="flex justify-center mb-10">
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center max-w-sm card-hover">
+                <div class="w-20 h-20 bg-green-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-md">
+                    <span class="text-white text-2xl">👩‍💼</span>
                 </div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Chris Prianto, SH.MM</h3>
                 <p class="text-green-600 font-medium mb-2">Sekretaris Camat</p>
@@ -168,86 +596,67 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👨‍💻</span>
-                </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-center">
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">🏛️</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Mashuri, SH.MM</h3>
                 <p class="text-purple-600 font-medium mb-2">Kasi Pemerintahan</p>
                 <p class="text-gray-600 text-sm">NIP: 197811202010011001</p>
             </div>
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-orange-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👩‍🏫</span>
-                </div>
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-orange-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">⚖️</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">H. Ajun Pamungkas, A.MD</h3>
                 <p class="text-orange-600 font-medium mb-2">Kasi Trantib</p>
                 <p class="text-gray-600 text-sm">NIP: 19781121200911005</p>
             </div>
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-teal-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👨‍🔧</span>
-                </div>
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-teal-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">⚕️</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">H. Wartam, AM.Kep</h3>
                 <p class="text-teal-600 font-medium mb-2">Kasi Kesos</p>
                 <p class="text-gray-600 text-sm">NIP: 197303111993031009</p>
             </div>
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-teal-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👨‍🔧</span>
-                </div>
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-red-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">🏘️</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">H. Agus Muaedi, S.Ag</h3>
-                <p class="text-teal-600 font-medium mb-2">Kasi PMD</p>
+                <p class="text-red-600 font-medium mb-2">Kasi PMD</p>
                 <p class="text-gray-600 text-sm">NIP: 196912282009061001</p>
             </div>
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-teal-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👨‍🔧</span>
-                </div>
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-yellow-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">💁‍♂️</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Adim, SM</h3>
-                <p class="text-teal-600 font-medium mb-2">Plt. Kasi Pelayanan Umum</p>
+                <p class="text-yellow-600 font-medium mb-2">Plt. Kasi Pelayanan Umum</p>
                 <p class="text-gray-600 text-sm">NIP: 1981082719991001</p>
             </div>
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-teal-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👨‍🔧</span>
-                </div>
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-cyan-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">💰</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Endi Suhendi, SM</h3>
-                <p class="text-teal-600 font-medium mb-2">Kasubag Keuangan & Kepegawaian</p>
+                <p class="text-cyan-600 font-medium mb-2">Kasubag Keuangan & Kepegawaian</p>
                 <p class="text-gray-600 text-sm">NIP: 197203112009061001</p>
             </div>
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
-                <div class="w-16 h-16 bg-teal-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span class="text-white">👨‍🔧</span>
-                </div>
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6 text-center card-hover">
+                <div class="w-16 h-16 bg-indigo-600 rounded-full mx-auto mb-4 flex items-center justify-center"><span class="text-white text-2xl">📋</span></div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Adim, SM</h3>
-                <p class="text-teal-600 font-medium mb-2">Kasubag Umum Program & Pelaporan</p>
+                <p class="text-indigo-600 font-medium mb-2">Kasubag Umum Program & Pelaporan</p>
                 <p class="text-gray-600 text-sm">NIP: 1981082719991001</p>
             </div>
         </div>
     </div>
 </section>
 
- <!-- Daftar Pegawai -->
-    <section id="pegawai" class="py-16 bg-white">
+<section id="pegawai" class="py-16 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Daftar Pegawai</h2>
                 <p class="text-lg text-gray-600">Tim profesional yang siap melayani masyarakat</p>
             </div>
 
-            <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <button onclick="filterPegawai('semua')" class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                <button onclick="filterPegawai('semua')" data-kategori="semua" class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Semua Pegawai
                 </button>
-                <button onclick="filterPegawai('pns')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
-                 
+             
 
-            <!-- Pegawai Grid -->
             <div id="pegawai-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- PNS -->
                 <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="pns">
                     <div class="w-12 h-12 bg-blue-500 rounded-full mx-auto mb-3 flex items-center justify-center">
                         <span class="text-white">👨‍💼</span>
@@ -273,8 +682,9 @@
                         <span class="text-white">👨‍💻</span>
                     </div>
                     <h3 class="font-semibold text-gray-900 text-center mb-1">Januar Ibrahim, S.I.P</h3>
+		    <p class="text-orange-600 text-sm text-center mb-1">Staff Kasi Pem</p>
                     <p class="text-blue-600 text-sm text-center mb-1">Penata Kelola Pemerintahan</p>
-                   
+                    
                     <p class="text-gray-600 text-xs text-center">NIP: 199701292025051004</p>
                 </div>
 
@@ -282,30 +692,29 @@
                     <div class="w-12 h-12 bg-purple-500 rounded-full mx-auto mb-3 flex items-center justify-center">
                         <span class="text-white">👩‍⚖</span>
                     </div>
-                    <h3 class="font-semibold text-gray-900 text-center mb-1">Putri Amalia, S.Kom</h3>
-                    <p class="text-blue-600 text-sm text-center mb-1">Penata Kelola Sistem & TI</p>
-                   
+		    <h3 class="font-semibold text-gray-900 text-center mb-1">Putri Amalia, S.Kom</h3>
+                    <p class="text-orange-600 text-sm text-center mb-1">Staff Kasubag UPP</p>
+                    <p class="text-gray-500 text-xs text-center mb-2">Penata Kelola Sistem & TI</p>
                     <p class="text-gray-600 text-xs text-center">NIP: 199807142025052005</p>
                 </div>
 
-                <!-- Honorer -->
                 <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
                     <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
                         <span class="text-white">👨‍🏫</span>
                     </div>
                     <h3 class="font-semibold text-gray-900 text-center mb-1">Wahyu Hidayat, S.A.P.</h3>
                     <p class="text-orange-600 text-sm text-center mb-1">Staff Pelayanan</p>
-                   
+                    
                     <p class="text-gray-600 text-xs text-center">Masa Kerja: 8 Tahun</p>
                 </div>
 
- <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
+<div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="honorer">
                     <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
                         <span class="text-white">👨‍🏫</span>
                     </div>
                     <h3 class="font-semibold text-gray-900 text-center mb-1">Andhi Permana</h3>
                     <p class="text-orange-600 text-sm text-center mb-1">Staff Pelayanan</p>
-                   
+                    
                     <p class="text-gray-600 text-xs text-center">Masa Kerja: 8 Tahun</p>
                 </div>
 
@@ -330,7 +739,6 @@
                     <p class="text-gray-600 text-xs text-center">Masa Kerja: 12 Tahun</p>
                 </div>
 
-                <!-- Kontrak -->
                 <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
                     <div class="w-12 h-12 bg-indigo-500 rounded-full mx-auto mb-3 flex items-center justify-center">
                         <span class="text-white">👩‍💻</span>
@@ -360,34 +768,23 @@
                     <p class="text-gray-500 text-xs text-center mb-2">PNS - Golongan II/c</p>
                     <p class="text-gray-600 text-xs text-center">NIP: 199408151999032008</p>
                 </div>
-
-                <div class="pegawai-card bg-white border border-gray-200 rounded-lg p-4 card-hover" data-kategori="kontrak">
-                    <div class="w-12 h-12 bg-lime-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <span class="text-white">👨‍📱</span>
-                    </div>
-                    <h3 class="font-semibold text-gray-900 text-center mb-1">Andi Saputra</h3>
-                    <p class="text-indigo-600 text-sm text-center mb-1">Social Media</p>
-                    <p class="text-gray-500 text-xs text-center mb-2">Kontrak</p>
-                    <p class="text-gray-600 text-xs text-center">Kontrak: 2024-2025</p>
-                </div>
+            
             </div>
         </div>
     </section>
-
-
 <section id="kontak" class="py-16 bg-gray-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Hubungi Kami</h2>
+             <h2 class="text-3xl md:text-4xl font-bold mb-4 text-blue-400">Hubungi Kami & Peta Lokasi</h2>
             <p class="text-lg text-gray-300">Kami siap melayani dan membantu kebutuhan masyarakat</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-12">
             <div>
                 <h3 class="text-2xl font-semibold mb-6">Informasi Kontak</h3>
-                <div class="space-y-4">
+                <div class="space-y-6">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4 shadow-md">
                             <span class="text-xl">📍</span>
                         </div>
                         <div>
@@ -396,16 +793,16 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4 shadow-md">
                             <span class="text-xl">📞</span>
                         </div>
                         <div>
                             <p class="font-medium">Telepon</p>
-                            <p class="text-gray-300">(+62) 857-3171-8562</p>
+                            <p class="text-gray-300">(+62) 857-3171-8562 (WhatsApp)</p>
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4 shadow-md">
                             <span class="text-xl">✉</span>
                         </div>
                         <div>
@@ -414,7 +811,7 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mr-4 shadow-md">
                             <span class="text-xl">🕒</span>
                         </div>
                         <div>
@@ -425,130 +822,128 @@
                 </div>
             </div>
 
-            <div>
-                <h3 class="text-2xl font-semibold mb-6">Kirim Pesan</h3>
-                <form id="contact-form" class="space-y-4">
-                    <div>
-                        <input type="text" id="nama" placeholder="Nama Lengkap" required
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <input type="email" id="email" placeholder="Email" required
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <input type="text" id="subjek" placeholder="Subjek" required
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <textarea id="pesan" rows="4" placeholder="Pesan Anda" required
-                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                        Kirim Pesan
-                    </button>
-                </form>
-            </div>
-        </div>
+      <div>
+    <h3 class="text-2xl font-bold mb-6 text-blue-250">Peta Lokasi</h3>
+    <div class="w-full h-64 bg-gray-700 rounded-xl flex items-center justify-center shadow-inner overflow-hidden">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.654944981305!2d107.34467057434307!3d-6.041993693943636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6bd47988ac6e37%3A0xe29e728c7706347a!2sKantor%20Kecamatan%20Cibuaya!5e0!3m2!1sen!2sid!4v1759656759733!5m2!1sen!2sid" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
     </div>
+</div>
 </section>
 
-<footer class="bg-gray-800 text-white py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="flex items-center justify-center mb-4">
-            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-                <span class="text-white font-bold">🏛</span>
-            </div>
-            <span class="text-lg font-semibold">Kecamatan Cibuaya</span>
-        </div>
-        <p class="text-gray-400 mb-4">Melayani dengan Dedikasi, Membangun dengan Integritas</p>
-        <p class="text-gray-500 text-sm">&copy; 2024 Kecamatan Cibuaya. Semua hak dilindungi.</p>
-    </div>
-</footer>
-    
+<button id="scrollToTopBtn" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700" title="Kembali ke Atas">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+</button>
+
+<div class="wa-float">
+    <a href="https://wa.me/6285731718562" target="_blank" title="Hubungi kami via WhatsApp">
+        <svg fill="#FFF" height="24" width="24" viewBox="0 0 24 24"><path d="M12.001 2.003C6.48 2.003 2 6.48 2 12.001c0 1.77.46 3.42 1.25 4.86L2.001 22l5.441-1.42C8.831 21.36 10.381 22 12.001 22c5.52 0 10.001-4.48 10.001-10.001 0-5.52-4.48-10.001-10.001-10.001zm3.88 13.97l-.09 0c-.27-.14-.54-.28-.81-.43l-.1-.05c-1.3-.64-2.52-1.63-3.66-2.91-.71-.8-1.26-1.7-1.61-2.65l-.04-.1c-.08-.24-.04-.49.12-.66l.54-.6c.14-.14.34-.23.54-.24l.09-.01c.21 0 .42.06.6.17l.08.06c.45.24.9.46 1.35.7.2.1.4.15.6.15.15 0 .31-.05.45-.14l.05-.03c.1-.06.2-.13.29-.22l.66-.8c.2-.23.3-.49.29-.76l-.01-.09c0-.28-.1-.55-.28-.75l-.26-.3c-.09-.1-.2-.19-.3-.27l-.08-.07c-.45-.43-.89-.87-1.34-1.31l-.22-.2-.04-.04c-.1-.08-.2-.15-.31-.22l-.08-.06c-.18-.14-.39-.24-.62-.24-.26 0-.52.1-.73.28l-.35.34c-.21.21-.34.48-.34.77 0 .28.1.56.3.77l.03.03c.09.09.18.18.27.27l.1.1.15.13c.75.69 1.4 1.49 1.94 2.4l.1.17c.5 1.12.78 2.27.8 3.55l-.01.32c-.01.19-.07.38-.17.55l-.12.18c-.28.42-.6.78-1.02 1.13l-.1.08c-.2.16-.43.25-.68.25-.26 0-.5-.1-.7-.27l-.1-.08c-.46-.39-.93-.78-1.4-1.16l-.2-.18c-.08-.06-.17-.12-.25-.18-.08-.06-.17-.12-.25-.18-.28-.21-.61-.31-.97-.31-.38 0-.74.15-1.01.44l-.27.3c-.34.36-.53.84-.53 1.34 0 .5.19.98.53 1.34l.3.3c.3.32.72.5.9.5l.02.01c.2 0 .4-.06.58-.19l.2-.12c.56-.37 1.1-.78 1.63-1.24l.27-.24c.7-.63 1.31-1.32 1.83-2.1l.1-.15c.34-.5.62-1.02.83-1.6l.04-.1c.07-.2.1-.41.1-.63 0-.17-.03-.34-.09-.5l-.01-.03z"/></svg>
+        WhatsApp
+    </a>
+</div>
+
+
 <script>
-    // Mobile menu toggle
+    // 1. Mobile menu toggle
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
         const mobileMenu = document.getElementById('mobile-menu');
         mobileMenu.classList.toggle('hidden');
     });
 
-    // Smooth scrolling for navigation
+    // 2. Smooth scrolling function
     function scrollToSection(sectionId) {
         document.getElementById(sectionId).scrollIntoView({
             behavior: 'smooth'
         });
     }
 
-    // Navigation link smooth scrolling
-    document.querySelectorAll('.nav-link').forEach(link => {
+    // 3. Navigation link smooth scrolling & close mobile menu (LOGIKA DIPERBAIKI)
+    document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            scrollToSection(targetId);
             
-            // Close mobile menu if open
-            document.getElementById('mobile-menu').classList.add('hidden');
+            const targetId = this.getAttribute('href')?.substring(1);
+
+            // Jika href tidak valid atau mengarah ke link eksternal (target="_blank"), biarkan default
+            if (!targetId || this.getAttribute('target') === '_blank') {
+                // Biarkan link eksternal atau link menu desktop utama berjalan normal
+                return;
+            }
+
+            // Mencegah navigasi default untuk mengaktifkan smooth scroll
+            e.preventDefault(); 
+            
+            if (targetId) {
+                scrollToSection(targetId);
+                
+                // --- Logika Penutupan Menu Mobile ---
+                const mobileMenu = document.getElementById('mobile-menu');
+                
+                // Cek apakah ini tautan di dalam menu mobile
+                if (!mobileMenu.classList.contains('hidden')) {
+                    
+                    // 1. Tutup menu utama mobile
+                    mobileMenu.classList.add('hidden');
+                    
+                    // 2. Tutup juga dropdown AlpineJS (Layanan atau Profil) jika link diklik dari dalamnya
+                    // Cari elemen terdekat yang memiliki data AlpineJS (x-data)
+                    const alpineDropdownContainer = this.closest('[x-data]'); 
+                    
+                    // Cek apakah AlpineJS sudah diinisialisasi pada elemen tersebut dan memiliki properti 'open'
+                    // Menggunakan alpineDropdownContainer.__x (Cara AlpineJS V3)
+                    if (alpineDropdownContainer && alpineDropdownContainer.__x) {
+                        // Secara manual set variabel 'open' AlpineJS menjadi false
+                        alpineDropdownContainer.__x.$data.open = false; 
+                    }
+                }
+            }
         });
     });
 
-    // Filter pegawai functionality
+    // 4. Filter pegawai functionality (PNS, Honorer, Kontrak)
     function filterPegawai(kategori) {
         const cards = document.querySelectorAll('.pegawai-card');
         const buttons = document.querySelectorAll('.filter-btn');
         
         // Update button styles
         buttons.forEach(btn => {
-            btn.classList.remove('bg-blue-600', 'text-white');
-            btn.classList.add('bg-gray-200', 'text-gray-700');
+            btn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            btn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
         });
         
-        // Highlight active button (assuming `event` is available globally in the context where filterPegawai is called)
-        // Since we don't have the event object directly, we select the button by category
-        const activeButton = document.querySelector(`.filter-btn[onclick*="'${kategori}'"]`);
-        if (activeButton) {
-            activeButton.classList.remove('bg-gray-200', 'text-gray-700');
-            activeButton.classList.add('bg-blue-600', 'text-white');
+        // Highlight active button
+        const activeBtn = Array.from(buttons).find(btn => btn.dataset.kategori === kategori);
+        if (activeBtn) {
+            activeBtn.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            activeBtn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
         }
-        
+
         // Filter cards
         cards.forEach(card => {
+            card.style.display = 'none';
             if (kategori === 'semua' || card.dataset.kategori === kategori) {
-                card.style.display = 'block';
-                card.style.animation = 'fadeIn 0.5s ease-in';
-            } else {
-                card.style.display = 'none';
+                // Use setTimeout to force re-render and trigger animation
+                setTimeout(() => {
+                    card.style.display = 'block';
+                }, 10);
             }
         });
     }
 
-    // Contact form submission
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const nama = document.getElementById('nama').value;
-        const email = document.getElementById('email').value;
-        
-        // Simulate form submission
-        alert(`Terima kasih ${nama}! Pesan Anda telah diterima. Kami akan segera menghubungi Anda melalui email ${email}.`);
-        
-        // Reset form
-        this.reset();
-    });
+    // Initialize filter to 'semua' when the page loads
+    window.onload = function() {
+        filterPegawai('semua');
+    };
 
-    // Add fade-in animation CSS for filtering
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Navbar scroll effect
+    // 6. Navbar scroll effect
     window.addEventListener('scroll', function() {
-        const nav = document.querySelector('nav');
+        const nav = document.getElementById('main-nav');
         if (window.scrollY > 100) {
             nav.classList.add('shadow-xl');
         } else {
@@ -556,14 +951,131 @@
         }
     });
 
-    // Initial filter state for Pegawai on load
-    document.addEventListener('DOMContentLoaded', function() {
-        const initialButton = document.querySelector('.filter-btn[onclick*="\'semua\'"]');
-        if (initialButton) {
-             initialButton.classList.remove('bg-gray-200', 'text-gray-700');
-             initialButton.classList.add('bg-blue-600', 'text-white');
+    // 7. Scroll To Top Button Logic
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    const rootElement = document.documentElement;
+
+    function handleScroll() {
+        // Tampilkan tombol setelah 300px scroll ke bawah
+        if (rootElement.scrollTop > 300) {
+            scrollToTopBtn.classList.add('is-visible');
+        } else {
+            scrollToTopBtn.classList.remove('is-visible');
         }
-    });
+    }
+
+    function scrollToTop() {
+        rootElement.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+// 8. Image Slider Functionality (Auto & Manual)
+let slideIndex = 1; // Mulai dari slide pertama (1-based index)
+const slides = document.getElementsByClassName('slider-image');
+const totalSlides = slides.length;
+let autoSlideTimeout; // Untuk menyimpan referensi timeout otomatis
+let dots; // Deklarasi variabel dots di scope global
+
+// Fungsi untuk membuat dots di awal
+function createDots() {
+    const dotsContainer = document.getElementById('slider-dots');
+    dotsContainer.innerHTML = ''; // Clear existing dots
+    
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.setAttribute('data-slide-index', i + 1); // 1-based index
+        
+        // Tambahkan event listener untuk navigasi manual melalui dot
+        dot.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-slide-index'));
+            // Gunakan plusSlides(0) untuk menampilkan slide yang ditentukan (index)
+            plusSlides(index - slideIndex);
+        });
+
+        dotsContainer.appendChild(dot);
+    }
+    // Setelah dibuat, simpan referensi ke semua elemen dot
+    dots = document.getElementsByClassName('dot');
+}
+
+// Fungsi inti untuk menampilkan slide tertentu
+function showSlide(n) {
+    if (n > totalSlides) {
+        slideIndex = 1;
+    } else if (n < 1) {
+        slideIndex = totalSlides;
+    } else {
+        slideIndex = n;
+    }
+
+    // 1. Kelola Gambar (Slides)
+    for (let i = 0; i < totalSlides; i++) {
+        slides[i].classList.remove('active');
+    }
+    slides[slideIndex - 1].classList.add('active');
+
+    // 2. Kelola Indikator (Dots)
+    if (dots && dots.length > 0) {
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].classList.remove('active');
+        }
+        dots[slideIndex - 1].classList.add('active');
+    }
+}
+
+// Fungsi untuk maju/mundur slide (digunakan oleh tombol manual)
+function plusSlides(n) {
+    // Clear the auto-slide timer immediately when a manual button is pressed
+    clearTimeout(autoSlideTimeout); 
+    
+    showSlide(slideIndex + n);
+    
+    // Restart the auto-slide timer after manual change
+    startAutoSlider(); 
+}
+
+// Fungsi untuk memulai kembali auto-slider
+function startAutoSlider() {
+    // Gunakan fungsi anonim untuk transisi ke slide berikutnya
+    autoSlideTimeout = setTimeout(function() {
+        showSlide(slideIndex + 1); // Pindah ke slide berikutnya
+        startAutoSlider(); // Panggil diri sendiri untuk looping
+    }, 7000); // Ganti setiap 7 detik
+}
+
+
+// Event listeners untuk tombol manual (Tidak Berubah)
+document.getElementById('prevBtn').addEventListener('click', () => {
+    plusSlides(-1); // Mundur 1 slide
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+    plusSlides(1); // Maju 1 slide
+});
+
+// Mulai slider saat window memuat
+window.addEventListener('load', () => {
+    if (totalSlides > 0) {
+        createDots(); // BUAT DOTS DULU
+        showSlide(1); // Pastikan slide pertama terlihat dan dot pertama aktif
+        startAutoSlider(); // Mulai auto-slider
+    }
+});
+// End of Auto Image Slider Functionality
+
+    // Attach event listeners (Tidak Berubah)
+    document.addEventListener('scroll', handleScroll);
+    scrollToTopBtn.addEventListener('click', scrollToTop);
+
+    // Attach event listeners
+    document.addEventListener('scroll', handleScroll);
+    scrollToTopBtn.addEventListener('click', scrollToTop);
 </script>
 </body>
 </html>
+<p class="text-center text-black-300">
+    Copyright © 2025 Amalia
+</p>
